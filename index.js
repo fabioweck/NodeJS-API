@@ -76,9 +76,9 @@ app.delete('/delete_room', async (req, res)=>{
 
   let id = req.body.ident;
 
-  newList = jsonFile.filter((item)=>{
+  let newList = jsonFile.filter((item)=>{
      if(item.id !== id) return item
-  })
+  });
 
   fs.writeFile(filePath, JSON.stringify(newList), ()=>{
     console.log(`Entry ${id} deleted.`);
