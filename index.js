@@ -1,0 +1,92 @@
+const express = require('express')
+const app = express()
+var bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+var fs = require('fs');
+const path = require('path');
+app.use(express.json());
+
+//Variables
+let jsonFile = []
+const filePath = path.join(__dirname, './assets/rooms.json');
+const port = process.env.PORT || 3000
+
+
+//Loads JSON file
+fs.readFile(filePath, function (err, data) {
+  if (err) 
+      throw err;
+  jsonFile = JSON.parse(data)
+});
+
+app.use((req, res, next) => {
+
+  res.header(
+
+      "Access-Control-Allow-Headers",
+
+      "Origin, X-Requested-With, Content-Type, Accept"
+
+  );
+
+  res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Specify the allowed HTTP methods
+  next();
+
+});
+
+app.options('*', (req, res) => {
+  res.status(200).end();
+});
+
+app.get('/rooms', function (req, res) {
+  res.send(JSON.stringify(jsonFile))
+})
+
+app.get('/', function (req, res) {
+  res.send(jsonFile);
+});
+
+app.listen(port, "", ()=>{
+  console.log(`Server running on port ${port}`)
+})
+
+app.post('/add_room', async (req, res)=>{
+
+  let idCounter = jsonFile.length;
+
+  let response = { 
+    id : (idCounter + 1),
+    date : req.body.date,
+    room : req.body.room,
+    start : req.body.start,
+    end: req.body.end
+  }
+
+  // console.log(response);
+
+  jsonFile.push(response);
+  
+  fs.writeFile(filePath, JSON.stringify(jsonFile), ()=>{
+    console.log("File written.");
+  });
+
+  res.send("File written.");
+})
+
+app.delete('/delete_room', async (req, res)=>{
+
+  let id = req.body.ident;
+
+  newList = jsonFile.filter((item)=>{
+     if(item.id !== id) return item
+  })
+
+  console.log(newList);
+
+  fs.writeFile(filePath, JSON.stringify(newList), ()=>{
+    console.log(`Entry ${id} deleted.`);
+  });
+
+  res.send(`Entry ${id} deleted.`);
+})
