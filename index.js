@@ -63,12 +63,10 @@ app.post('/add_room', async (req, res)=>{
     end: req.body.end
   }
 
-  // console.log(response);
-
   jsonFile.push(response);
   
   fs.writeFile(filePath, JSON.stringify(jsonFile), ()=>{
-    console.log("File written.");
+    console.log(`Entry ID:${response.id} added.`);
   });
 
   res.send("File written.");
@@ -82,11 +80,10 @@ app.delete('/delete_room', async (req, res)=>{
      if(item.id !== id) return item
   })
 
-  console.log(newList);
-
   fs.writeFile(filePath, JSON.stringify(newList), ()=>{
     console.log(`Entry ${id} deleted.`);
   });
 
   res.send(`Entry ${id} deleted.`);
+
 })
