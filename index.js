@@ -13,11 +13,16 @@ const port = process.env.PORT || 3000
 
 
 //Loads JSON file
-fs.readFile(filePath, function (err, data) {
-  if (err) 
-      throw err;
-  jsonFile = JSON.parse(data)
-});
+const loadFile = ()=>{
+  fs.readFile(filePath, function (err, data) {
+    if (err) 
+        throw err;
+    jsonFile = JSON.parse(data)
+  });
+}
+
+loadFile();
+
 
 app.use((req, res, next) => {
 
@@ -26,7 +31,6 @@ app.use((req, res, next) => {
       "Access-Control-Allow-Headers",
 
       "Origin, X-Requested-With, Content-Type, Accept"
-
   );
 
   res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
@@ -51,7 +55,7 @@ app.listen(port, "", ()=>{
   console.log(`Server running on port ${port}`)
 })
 
-app.post('/add_room', async (req, res)=>{
+app.post('/add_room', (req, res)=>{
 
   let idCounter = jsonFile.length;
 
@@ -70,20 +74,32 @@ app.post('/add_room', async (req, res)=>{
   });
 
   res.send("File written.");
-})
+});
 
-app.delete('/delete_room', async (req, res)=>{
+app.delete('/delete_room', (req, res)=>{
 
   let id = req.body.ident;
 
-  newList = jsonFile.filter((item)=>{
+  if (typeof id !== 'number') {
+    return res.status(400).send('Invalid ID format');
+  }
+
+  let newList = jsonFile.filter((item)=>{
      if(item.id !== id) return item
   })
 
-  fs.writeFile(filePath, JSON.stringify(newList), ()=>{
-    console.log(`Entry ${id} deleted.`);
+  fs.writeFile(filePath, JSON.stringify(newList), (err)=>{
+    if(err){
+      console.log(err);
+      res.status(500).send("Error writing to file");
+    }
+    else{
+      console.log(newList);
+      console.log(`Entry ${id} deleted.`);
+      loadFile();
+      res.send(`Entry ${id} deleted.`);
+    }
+    
   });
 
-  res.send(`Entry ${id} deleted.`);
-
-})
+});
