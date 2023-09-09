@@ -86,7 +86,7 @@ app.delete('/delete_room', (req, res)=>{
 
   let newList = jsonFile.filter((item)=>{
      if(item.id !== id) return item
-  })
+  });
 
   fs.writeFile(filePath, JSON.stringify(newList), (err)=>{
     if(err){
@@ -102,4 +102,4 @@ app.delete('/delete_room', (req, res)=>{
     
   });
 
-});
+})
