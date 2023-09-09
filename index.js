@@ -9,8 +9,7 @@ app.use(express.json());
 //Variables
 let jsonFile = []
 const filePath = path.join(__dirname, './assets/rooms.json');
-const port = process.env.PORT || 3000
-
+const port = process.env.PORT || 3000;
 
 //Loads JSON file
 const loadFile = ()=>{
@@ -38,7 +37,6 @@ const loadFile = ()=>{
 }
 
 //Calls load file
-loadFile();
 
 //Middleware to avoid CORS policy and methods problems
 app.use((req, res, next) => {
@@ -68,6 +66,7 @@ app.get('/rooms', function (req, res) {
 
 //Route to get json file
 app.get('/', function (req, res) {
+  loadFile();
   res.status(200).send(jsonFile);
 });
 
