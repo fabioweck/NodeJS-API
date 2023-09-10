@@ -67,7 +67,7 @@ app.post('/add_room', (req, res)=>{
 
   let data = JSON.stringify(fileParsed, null, 2);
 
-  fs.writeFile(filePath, data, (err)=>{
+  fs.writeFileSync(filePath, data, (err)=>{
     if(err){
       console.log("Error writing file.");
       res.send("Error writing file.");
@@ -87,7 +87,7 @@ app.delete("/delete_room", (req,res)=>{
 
   let data = JSON.stringify(fileParsed, null, 2);
   
-  fs.writeFile(filePath, data, (err)=>{
+  fs.writeFileSync(filePath, data, (err)=>{
     if(err){
       console.log("Error writing file.");
       res.send("Error writing file.");
