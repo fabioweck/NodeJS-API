@@ -63,9 +63,11 @@ app.post('/add_room', (req, res)=>{
     else if(a.start > b.start) return 1;
     else if(a.start < b.start) return -1;
     else return 0;
-  })
+  });
 
-  fs.writeFile(filePath, JSON.stringify(fileParsed), (err)=>{
+  let data = JSON.stringify(fileParsed, null, 2);
+
+  fs.writeFile(filePath, data, (err)=>{
     if(err){
       console.log("Error writing file.");
       res.send("Error writing file.");
@@ -82,8 +84,10 @@ app.delete("/delete_room", (req,res)=>{
   let id = req.body.ident;
   
   const filteredJson = fileParsed.filter((item)=> {return item.id !== id});
+
+  let data = JSON.stringify(fileParsed, null, 2);
   
-  fs.writeFile(filePath, JSON.stringify(filteredJson), (err)=>{
+  fs.writeFile(filePath, data, (err)=>{
     if(err){
       console.log("Error writing file.");
       res.send("Error writing file.");
