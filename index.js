@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 
 const jsonFile = require("./rooms.json");
 let fileParsed;
-const filePath = './rooms.json';
+const filePath = 'rooms.json';
 
 fs.readFile(filePath, (err, data)=>{
   if(err){
@@ -67,14 +67,14 @@ app.post('/add_room', (req, res)=>{
 
   let data = JSON.stringify(fileParsed, null, 2);
 
-  fs.writeFileSync(filePath, data, (err)=>{
+  fs.writeFile(filePath, data, (err)=>{
     if(err){
-      console.log("Error writing file.");
-      res.send("Error writing file.");
+      console.log("--Error writing file.--");
+      res.send("--Error writing file.--");
     }
     else{
-      console.log("File written.");
-      res.send("File written.");
+      console.log("--File written.--");
+      res.send("--File written.--");
     }
   });
 });
@@ -85,16 +85,16 @@ app.delete("/delete_room", (req,res)=>{
   
   const filteredJson = fileParsed.filter((item)=> {return item.id !== id});
 
-  let data = JSON.stringify(fileParsed, null, 2);
+  let data = JSON.stringify(filteredJson, null, 2);
   
-  fs.writeFileSync(filePath, data, (err)=>{
+  fs.writeFile(filePath, data, (err)=>{
     if(err){
-      console.log("Error writing file.");
-      res.send("Error writing file.");
+      console.log("--Error writing file.--");
+      res.send("--Error writing file.--");
     }
     else{
-      console.log("File written.");
-      res.send("File written.");
+      console.log("--File written.--");
+      res.send("--File written.--");
     }
   });
 });
