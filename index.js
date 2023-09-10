@@ -25,13 +25,14 @@ app.use((req, res, next) => {
   next();
 });
 
-const jsonFile = require("./assets/rooms.json");
+const jsonFile = require("./rooms.json");
 let fileParsed;
-const filePath = path.join(__dirname, './assets/rooms.json');
+const filePath = './rooms.json';
 
 fs.readFile(filePath, (err, data)=>{
   if(err){
-    return err;
+    console.log(err);
+    return;
   }
 
   fileParsed = JSON.parse(data);
